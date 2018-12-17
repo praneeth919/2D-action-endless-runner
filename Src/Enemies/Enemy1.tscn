@@ -1,0 +1,81 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://Assets/Police guard.png/11.png" type="Texture" id=1]
+[ext_resource path="res://Src/Enemies/Enemy1.gd" type="Script" id=2]
+[ext_resource path="res://Assets/Enemies/10.png" type="Texture" id=3]
+[ext_resource path="res://Assets/Enemies/11.png" type="Texture" id=4]
+[ext_resource path="res://Assets/Enemies/13.png" type="Texture" id=5]
+[ext_resource path="res://Src/Weapons/EnemyPistol.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Assets/Enemies/3.png" type="Texture" id=7]
+[ext_resource path="res://Assets/Enemies/14.png" type="Texture" id=8]
+[ext_resource path="res://Assets/Enemies/12.png" type="Texture" id=9]
+[ext_resource path="res://Assets/Enemies/15.png" type="Texture" id=10]
+[ext_resource path="res://Assets/Enemies/6.png" type="Texture" id=11]
+[ext_resource path="res://Assets/Enemies/5.png" type="Texture" id=12]
+[ext_resource path="res://Src/Weapons/EnemyAk47.tscn" type="PackedScene" id=13]
+[ext_resource path="res://Assets/Police guard.png/13.png" type="Texture" id=14]
+
+[sub_resource type="CapsuleShape2D" id=1]
+radius = 4.0
+height = 5.96799
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ ExtResource( 12 ), ExtResource( 11 ) ],
+"loop": true,
+"name": "idle",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 14 ), ExtResource( 3 ), ExtResource( 4 ) ],
+"loop": false,
+"name": "death",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 1 ), ExtResource( 7 ) ],
+"loop": false,
+"name": "bomb_death",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 9 ), ExtResource( 5 ), ExtResource( 8 ), ExtResource( 10 ) ],
+"loop": true,
+"name": "run",
+"speed": 10.0
+} ]
+
+[node name="Enemy1" type="KinematicBody2D" groups=[
+"Enemies",
+]]
+scale = Vector2( 1.5, 1.5 )
+collision_layer = 4
+script = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0.5, 0.875 )
+shape = SubResource( 1 )
+
+[node name="DeathSfx" type="AudioStreamPlayer" parent="."]
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+frames = SubResource( 2 )
+animation = "idle"
+flip_h = true
+
+[node name="Weapons" type="Node2D" parent="."]
+position = Vector2( -1, 1 )
+scale = Vector2( 0.8, 0.8 )
+
+[node name="EnemyPistol" parent="Weapons" instance=ExtResource( 6 )]
+visible = false
+position = Vector2( 2.08333, 0.416667 )
+
+[node name="EnemyAk47" parent="Weapons" instance=ExtResource( 13 )]
+visible = false
+position = Vector2( 2.08333, 3.75 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+position = Vector2( 44.6667, 1.33333 )
+
+[connection signal="animation_finished" from="AnimatedSprite" to="." method="_on_AnimatedSprite_animation_finished"]
+[connection signal="screen_entered" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_entered"]
+[connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]

@@ -1,0 +1,57 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Src/Enemies/Misile.gd" type="Script" id=1]
+[ext_resource path="res://Assets/weapons/Image result for pixel missile.png" type="Texture" id=2]
+[ext_resource path="res://Assets/pixel.png" type="Texture" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 16, 8 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 18, 8 )
+
+[node name="Misile" type="Area2D" groups=[
+"EProjectiles",
+]]
+collision_layer = 4
+collision_mask = 2147483655
+script = ExtResource( 1 )
+speed = 500
+damage = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2( -2, -4 )
+shape = SubResource( 1 )
+
+[node name="AlliesArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AlliesArea"]
+position = Vector2( -2, -4 )
+shape = SubResource( 2 )
+disabled = true
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( -6, -4 )
+scale = Vector2( 0.2, 0.2 )
+texture = ExtResource( 2 )
+flip_h = true
+
+[node name="Sprite2" type="Sprite" parent="."]
+modulate = Color( 0.956863, 0.0588235, 0.0588235, 1 )
+position = Vector2( -647.337, -5.808 )
+scale = Vector2( 2000, -0.0813125 )
+texture = ExtResource( 3 )
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+position = Vector2( -286.75, -6 )
+
+[node name="Sfx" type="AudioStreamPlayer2D" parent="."]
+pitch_scale = 0.28
+
+[connection signal="area_entered" from="." to="." method="_on_Misile_area_entered"]
+[connection signal="body_entered" from="." to="." method="_on_Misile_body_entered"]
+[connection signal="body_entered" from="AlliesArea" to="." method="_on_AlliesArea_body_entered"]
+[connection signal="screen_entered" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_entered"]
