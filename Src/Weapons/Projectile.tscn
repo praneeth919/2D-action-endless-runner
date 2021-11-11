@@ -1,0 +1,50 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Assets/weapons/bullet.png" type="Texture" id=1]
+[ext_resource path="res://Src/Weapons/Projectile.gd" type="Script" id=2]
+[ext_resource path="res://Assets/weapons/pistol death/2.png" type="Texture" id=3]
+[ext_resource path="res://Assets/Music and sfx/hit sfx.wav" type="AudioStream" id=4]
+
+[sub_resource type="CapsuleShape2D" id=1]
+radius = 4.21396
+height = 9.30936
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ ExtResource( 3 ), ExtResource( 3 ), ExtResource( 1 ) ],
+"loop": false,
+"name": "ready",
+"speed": 5.0
+} ]
+
+[node name="Projectile" type="Area2D" groups=[
+"Projectiles",
+]]
+collision_layer = 8
+collision_mask = 2147483662
+script = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5708
+shape = SubResource( 1 )
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+position = Vector2( 36, 0 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+position = Vector2( -3, 1 )
+rotation = 1.5708
+scale = Vector2( 0.7, 0.7 )
+frames = SubResource( 2 )
+animation = "ready"
+frame = 2
+playing = true
+
+[node name="HitSfx" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+volume_db = 6.058
+
+[connection signal="area_entered" from="." to="." method="_on_Projectile_area_entered"]
+[connection signal="body_entered" from="." to="." method="_on_Projectile_body_entered"]
+[connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]
+[connection signal="finished" from="HitSfx" to="." method="_on_HitSfx_finished"]
